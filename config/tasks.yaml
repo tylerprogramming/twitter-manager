@@ -1,0 +1,68 @@
+ai_news_retrieval_task:
+  description: >
+    Research and find the latest ai news based on the given topic {topic}.  Only do a single search for this topic.
+    Focus on the latest news and updates in the ai industry.
+    Utilize internet search tools and news aggregation sites.
+
+    Remember the date is {date}
+  expected_output: >
+    The list of ai news articles you have found including the title, snippet, and website link.
+
+ai_news_picker_task:
+  description: >
+    Pick the most interesting ai news from the list.
+  expected_output: >
+    A single entry of the most interesting ai news from the list.
+    The entry should be a summary of the article.
+
+ai_news_aggregation_task:
+  description: >
+    Summarize the news article.
+  expected_output: >
+    The entry should be a summary of the article.
+
+tweet_preparation_task:
+  description: >
+    Create a compelling tweet for X (formerly Twitter) based on the following context. The tweet should:
+
+    1. Be under 280 characters
+    2. Use 2-3 relevant emojis
+    3. Sound personable and natural, not AI-generated
+    4. Highlight 2-3 key points from the given context
+    5. Avoid using hashtags
+    6. Use line breaks where needed
+    7. Don't add anything else, just the tweet.
+
+    Generate the tweet now from given context.
+
+    Here is an example tweet I would use for reference:
+
+    🚀 Exciting news from @OpenAI DevDay! 
+    - CEO Sam Altman announced agents are set to launch in 2024. 
+    - Imagine AI making calls and ordering strawberries for you! 🍓
+
+    We're currently in stage two of AGI, soon moving to stage three where AI acts independently. Big things ahead! 🤖✨
+
+    Instead I would create it this way:
+
+    🚀 Exciting news from @OpenAI DevDay! 
+
+    - CEO Sam Altman announced agents are set to launch in 2024. 
+    - Imagine AI making calls and ordering strawberries for you! 🍓
+
+    Do you think we are in stage two of AGI?
+
+    here is the list of emojis you can use: https://emojipedia.org/twitter
+
+    Ensure the tweet is under 280 characters and uses 4-6 relevant emojis.  If it is not, shorten it.  Also keep the return lines, line breaks, and 
+    don't change it if it's under 280 characters and looks good.  Make sure it's personable and natural, not AI-generated.
+
+  expected_output: >
+    A compelling tweet for X (formerly Twitter) based on the given context.  It must be 280 characters or less.  It should have everything listed 
+    in the description.  Again, no hashtags.
+
+tweet_posting_task:
+  description: >
+    Post the tweet to X (formerly Twitter).
+  expected_output: >
+    The tweet that is posted to X (formerly Twitter).  Ensure the line breaks are correct, there is a clear title, then key points
