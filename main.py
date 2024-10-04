@@ -7,8 +7,8 @@ load_dotenv()
 
 def run_crew():
     inputs = {
-        'topic': 'latest ai news',
-        'date': datetime.now().strftime("%Y-%m-%d")
+        'topic': 'random animal facts',
+        'date': datetime.now().strftime("%Y")
     }
 
     result = TwitterManagerCrew().crew().kickoff(inputs=inputs)

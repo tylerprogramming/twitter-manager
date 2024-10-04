@@ -1,45 +1,43 @@
-from requests_oauthlib import OAuth1Session
 import os
-import json
-from dotenv import load_dotenv
+from requests_oauthlib import OAuth1Session
+import time
 
 class TweetPoster:
     def __init__(self):
-        load_dotenv()
-        self.consumer_key = os.environ.get("CONSUMER_KEY")
-        self.consumer_secret = os.environ.get("CONSUMER_SECRET")
-        self.access_token = os.environ.get("ACCESS_TOKEN")
-        self.access_token_secret = os.environ.get("ACCESS_TOKEN_SECRET")
-        self.bearer_token = os.environ.get("BEARER_TOKEN")
-        self.oauth = self._create_oauth_session()
+        self.oauth = self._get_oauth_session()
+        self.tweet_url = "https://api.twitter.com/2/tweets"
 
-    def _create_oauth_session(self):
-        return OAuth1Session(
-            self.consumer_key,
-            client_secret=self.consumer_secret,
-            resource_owner_key=self.access_token,
-            resource_owner_secret=self.access_token_secret,
+    def _get_oauth_session(self):
+        consumer_key = os.environ.get("CONSUMER_KEY")
+        consumer_secret = os.environ.get("CONSUMER_SECRET")
+        access_token = os.environ.get("ACCESS_TOKEN")
+        access_token_secret = os.environ.get("ACCESS_TOKEN_SECRET")
+
+        # Create the final OAuth1Session
+        oauth = OAuth1Session(
+            consumer_key,
+            client_secret=consumer_secret,
+            resource_owner_key=access_token,
+            resource_owner_secret=access_token_secret,
         )
+        
+        return oauth
 
     def post_tweet(self, tweet_text):
+        if not self.oauth:
+            return None
+
         payload = {"text": tweet_text}
-        response = self.oauth.post(
-            "https://api.twitter.com/2/tweets",
-            json=payload,
-        )
+        response = self.oauth.post(self.tweet_url, json=payload)
 
-        if response.status_code != 201:
-            raise Exception(
-                f"Request returned an error: {response.status_code} {response.text}"
-            )
+        if response.status_code == 201:
+            print("Tweet posted successfully!")
+            return response.json()
+        else:
+            print(f"Failed to post tweet. Status code: {response.status_code}")
+            print(response.text)
+            return None
 
-        print(f"Response code: {response.status_code}")
-        json_response = response.json()
-        print(json.dumps(json_response, indent=4, sort_keys=True))
-        return json_response
-
-# Example usage:
 if __name__ == "__main__":
-    tweet_poster = TweetPoster()
-    tweet_text = "👉 Hello world!\n👉 This is a test tweet.\n👉 https://x.com/xmanager\n👉 https://youtu.be/76h5Hq6dTpk"
-    tweet_poster.post_tweet(tweet_text)
+    poster = TweetPoster()
+    poster.post_tweet("Hello, Twitter! This is a test tweet from my Python script.")

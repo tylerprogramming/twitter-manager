@@ -6,16 +6,14 @@ class TweetManagerTool(BaseTool):
     name: str = "Tweet Manager"
     description: str = "Post a tweet to X (formerly Twitter)."
 
-    def _run(self, tweet_data: dict) -> str:
-        # Extract the tweet from the dictionary
-        tweet = tweet_data.get('tweet', '')
+    def _run(self, tweet: str) -> str:
+        tweet_poster = TweetPoster()
+        response = tweet_poster.post_tweet(tweet)
 
-        # Convert emoji aliases to Unicode
-        tweet_with_emojis = emoji.emojize(tweet, language='alias')
-        
-        # Encode the tweet as UTF-8, replacing any problematic characters
-        encoded_tweet = tweet_with_emojis.encode('utf-8', errors='replace').decode('utf-8')
+        print(f"Tweet: {tweet}")
+        print(f"Response: {response.status_code}")
 
-        response = TweetPoster().post_tweet(encoded_tweet)
-        
-        return response
+        if 200 <= response.status_code < 300:
+            return response
+        else:
+            raise Exception(f"Failed to post tweet. Status code: {response.status_code}, Response: {response.text}")

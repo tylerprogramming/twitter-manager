@@ -7,6 +7,7 @@ from crew_tools import TweetManagerTool
 
 class Tweet(BaseModel):
     tweet: str = Field(..., description="The tweet to be posted")
+    text: str = Field(..., description="The tweet to be posted")
 
 @CrewBase
 class TwitterManagerCrew():
@@ -16,27 +17,27 @@ class TwitterManagerCrew():
     tasks_config = 'config/tasks.yaml'
 
     @agent
-    def ai_news_retriever(self) -> Agent:
+    def animal_facts_retriever(self) -> Agent:
         return Agent(
-            config=self.agents_config['ai_news_retriever'],
-            tools=[SerperDevTool()],
+            config=self.agents_config['animal_facts_retriever'],
+            tools=[SerperDevTool(n_results=3)],
             verbose=True,
             allow_delegation=False,
         )
     
     @agent
-    def ai_news_picker(self) -> Agent:
+    def animal_facts_picker(self) -> Agent:
         return Agent(
-            config=self.agents_config['ai_news_picker'],
+            config=self.agents_config['animal_facts_picker'],
             tools=[],
             verbose=True,
             allow_delegation=False,
         )
     
     @agent
-    def ai_news_aggregator(self) -> Agent:
+    def animal_facts_aggregator(self) -> Agent:
         return Agent(
-            config=self.agents_config['ai_news_aggregator'],
+            config=self.agents_config['animal_facts_aggregator'],
             tools=[ScrapeWebsiteTool()],
             verbose=True,
             allow_delegation=False,
@@ -61,24 +62,24 @@ class TwitterManagerCrew():
         )
     
     @task
-    def ai_news_retrieval_task(self) -> Task:
+    def animal_facts_retrieval_task(self) -> Task:
         return Task(
-            config=self.tasks_config['ai_news_retrieval_task'],
-            agent=self.ai_news_retriever(),
+            config=self.tasks_config['animal_facts_retrieval_task'],
+            agent=self.animal_facts_retriever(),
         )
     
     @task
-    def ai_news_picker_task(self) -> Task:
+    def animal_facts_picker_task(self) -> Task:
         return Task(
-            config=self.tasks_config['ai_news_picker_task'],
-            agent=self.ai_news_picker(),
+            config=self.tasks_config['animal_facts_picker_task'],
+            agent=self.animal_facts_picker(),
         )
     
     @task
-    def ai_news_aggregation_task(self) -> Task:
+    def animal_facts_aggregation_task(self) -> Task:
         return Task(
-            config=self.tasks_config['ai_news_aggregation_task'],
-            agent=self.ai_news_aggregator(),
+            config=self.tasks_config['animal_facts_aggregation_task'],
+            agent=self.animal_facts_aggregator(),
         )
     
     @task
@@ -92,8 +93,8 @@ class TwitterManagerCrew():
     def tweet_posting_task(self) -> Task:
         return Task(
             config=self.tasks_config['tweet_posting_task'],
-            agent=self.tweet_poster(),
-            output_json=Tweet
+            agent=self.tweet_poster()
+            
         )
 
     @crew
