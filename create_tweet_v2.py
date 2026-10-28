@@ -39,5 +39,8 @@ class TweetPoster:
             return None
 
 if __name__ == "__main__":
+    # main.py loads .env before the crew runs; do the same when this file is run directly
+    from dotenv import load_dotenv
+    load_dotenv()
     poster = TweetPoster()
     poster.post_tweet("Hello, Twitter! This is a test tweet from my Python script.")
