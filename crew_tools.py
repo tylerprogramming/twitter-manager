@@ -1,5 +1,4 @@
-import emoji
-from crewai_tools import BaseTool
+from crewai.tools import BaseTool
 from create_tweet_v2 import TweetPoster
 
 class TweetManagerTool(BaseTool):
