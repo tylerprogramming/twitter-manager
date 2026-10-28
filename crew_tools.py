@@ -1,5 +1,4 @@
-import emoji
-from crewai_tools import BaseTool
+from crewai.tools import BaseTool
 from create_tweet_v2 import TweetPoster
 
 class TweetManagerTool(BaseTool):
@@ -8,12 +7,14 @@ class TweetManagerTool(BaseTool):
 
     def _run(self, tweet: str) -> str:
         tweet_poster = TweetPoster()
-        response = tweet_poster.post_tweet(tweet)
+        # post_tweet returns the parsed JSON body on HTTP 201, or None after
+        # printing the status code and error body.
+        result = tweet_poster.post_tweet(tweet)
 
         print(f"Tweet: {tweet}")
-        print(f"Response: {response.status_code}")
 
-        if 200 <= response.status_code < 300:
-            return response
-        else:
-            raise Exception(f"Failed to post tweet. Status code: {response.status_code}, Response: {response.text}")
+        if result is None:
+            raise Exception("Failed to post tweet. See the status code and response printed above.")
+
+        tweet_id = (result.get("data") or {}).get("id", "unknown")
+        return f"Posted tweet {tweet_id}: {tweet}"

@@ -1,2 +1,6 @@
-tweepy
-python-dotenv
+# CrewAI crew (main.py, twitter_manager_crew.py) and the SerperDevTool /
+# ScrapeWebsiteTool tools it uses
+crewai[tools]>=1.15,<2
+# create_tweet_v2.py posts to the X API v2 with an OAuth 1.0a user session
+requests-oauthlib>=2.0,<3
+python-dotenv>=1.0
